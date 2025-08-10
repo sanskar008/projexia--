@@ -6,8 +6,8 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
+} from "../components/ui/card";
+import { Progress } from "../components/ui/progress";
 import { CheckCircle, Clock, AlertCircle, PlusCircle } from "lucide-react";
 import { TaskStatus, Task } from "../contexts/ProjectContext";
 import {
@@ -16,9 +16,9 @@ import {
   SelectValue,
   SelectContent,
   SelectItem,
-} from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
-import { toast } from "@/hooks/use-toast";
+} from "../components/ui/select";
+import { Button } from "../components/ui/button";
+import { toast } from "../hooks/use-toast";
 import {
   Dialog,
   DialogContent,
@@ -27,9 +27,9 @@ import {
   DialogTrigger,
   DialogFooter,
   DialogClose,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+} from "../components/ui/dialog";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
 import { useState } from "react";
 
 const Dashboard = () => {

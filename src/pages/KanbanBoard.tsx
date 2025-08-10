@@ -5,27 +5,27 @@ import {
   TaskStatus,
   TaskPriority,
 } from "../contexts/ProjectContext";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "../components/ui/button";
+import { Card, CardContent } from "../components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
+} from "../components/ui/dialog";
 import { AlertCircle, Users, MessageCircle } from "lucide-react";
-import { Separator } from "@/components/ui/separator";
-import { Badge } from "@/components/ui/badge";
-import { toast } from "@/hooks/use-toast";
-import AddTaskDialog from "@/components/kanban/AddTaskDialog";
-import InviteMemberDialog from "@/components/kanban/InviteMemberDialog";
-import TaskFilter from "@/components/kanban/TaskFilter";
-import TaskStatistics from "@/components/kanban/TaskStatistics";
+import { Separator } from "../components/ui/separator";
+import { Badge } from "../components/ui/badge";
+import { toast } from "../hooks/use-toast";
+import AddTaskDialog from "../components/kanban/AddTaskDialog";
+import InviteMemberDialog from "../components/kanban/InviteMemberDialog";
+import TaskFilter from "../components/kanban/TaskFilter";
+import TaskStatistics from "../components/kanban/TaskStatistics";
 import { format } from "date-fns";
-import EditTaskDialog from "@/components/kanban/EditTaskDialog";
-import * as api from "@/services/api";
+import EditTaskDialog from "../components/kanban/EditTaskDialog";
+import * as api from "../services/api";
 
 const KanbanBoard = () => {
   const { currentProject, updateTask, loadTasks } = useProject();

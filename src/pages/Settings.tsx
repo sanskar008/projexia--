@@ -5,14 +5,14 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
-import { Button } from "@/components/ui/button";
+} from "../components/ui/card";
+import { Label } from "../components/ui/label";
+import { Switch } from "../components/ui/switch";
+import { Button } from "../components/ui/button";
 import { useProject } from "../contexts/ProjectContext";
-import { toast } from "@/hooks/use-toast";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import * as api from "@/services/api";
+import { toast } from "../hooks/use-toast";
+import { Avatar, AvatarImage, AvatarFallback } from "../components/ui/avatar";
+import * as api from "../services/api";
 import { useState } from "react";
 
 const avatarOptions = [

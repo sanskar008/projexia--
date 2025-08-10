@@ -12,9 +12,13 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 8080;
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://projexia-eight.vercel.app",
+];
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: allowedOrigins,
     credentials: true,
   })
 );

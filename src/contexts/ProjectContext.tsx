@@ -1,11 +1,27 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { toast } from "@/hooks/use-toast";
-import * as api from "@/services/api";
-import { authService, User, LoginCredentials, SignupData } from "@/services/auth";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
+import { toast } from "../hooks/use-toast";
+import * as api from "../services/api";
+import {
+  authService,
+  User,
+  LoginCredentials,
+  SignupData,
+} from "../services/auth";
 
 // Define types for our data structures
 export type TaskPriority = "low" | "medium" | "high" | "urgent";
-export type TaskStatus = "backlog" | "todo" | "in-progress" | "review" | "completed";
+export type TaskStatus =
+  | "backlog"
+  | "todo"
+  | "in-progress"
+  | "review"
+  | "completed";
 
 export interface Task {
   id: string;
@@ -63,13 +79,17 @@ interface ProjectContextType {
   projects: Project[];
   currentProject: Project | null;
   setCurrentProject: (project: Project | null) => void;
-  createProject: (project: Omit<Project, "id" | "createdAt" | "updatedAt">) => Promise<Project>;
+  createProject: (
+    project: Omit<Project, "id" | "createdAt" | "updatedAt">
+  ) => Promise<Project>;
   updateProject: (id: string, project: Partial<Project>) => Promise<Project>;
   deleteProject: (id: string) => Promise<void>;
 
   // Task management
   tasks: Task[];
-  createTask: (task: Omit<Task, "id" | "createdAt" | "updatedAt">) => Promise<Task>;
+  createTask: (
+    task: Omit<Task, "id" | "createdAt" | "updatedAt">
+  ) => Promise<Task>;
   updateTask: (id: string, task: Partial<Task>) => Promise<Task>;
   deleteTask: (id: string) => Promise<void>;
   addComment: (taskId: string, content: string) => Promise<Comment>;
@@ -79,7 +99,9 @@ interface ProjectContextType {
 
 const ProjectContext = createContext<ProjectContextType | undefined>(undefined);
 
-export const ProjectProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const ProjectProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [projects, setProjects] = useState<Project[]>([]);
@@ -95,7 +117,7 @@ export const ProjectProvider: React.FC<{ children: ReactNode }> = ({ children })
         setError(null);
         const user = authService.getCurrentUser();
         setCurrentUser(user);
-        
+
         if (user) {
           await loadProjects();
         }
@@ -135,14 +157,14 @@ export const ProjectProvider: React.FC<{ children: ReactNode }> = ({ children })
       setError(null);
       const data = await api.fetchProjects(currentUser?.id, currentUser?.email);
       setProjects(data);
-      
+
       // If no current project is selected, select the first one
       if (data.length > 0 && !currentProject) {
         setCurrentProject(data[0]);
       }
-      
+
       // If current project exists but not in the loaded projects, clear it
-      if (currentProject && !data.find(p => p.id === currentProject.id)) {
+      if (currentProject && !data.find((p) => p.id === currentProject.id)) {
         setCurrentProject(null);
       }
     } catch (err) {
@@ -153,18 +175,18 @@ export const ProjectProvider: React.FC<{ children: ReactNode }> = ({ children })
 
   const loadTasks = async () => {
     if (!currentProject || !currentProject.id) return;
-    
+
     try {
       setError(null);
       const data = await api.fetchTasksByProject(currentProject.id);
       setTasks(data);
-      
+
       // Update current project with latest tasks
-      setCurrentProject(prev => {
+      setCurrentProject((prev) => {
         if (!prev) return null;
         return {
           ...prev,
-          tasks: data
+          tasks: data,
         };
       });
     } catch (err) {
@@ -200,12 +222,14 @@ export const ProjectProvider: React.FC<{ children: ReactNode }> = ({ children })
   };
 
   // Project management functions
-  const createProject = async (project: Omit<Project, "id" | "createdAt" | "updatedAt">) => {
+  const createProject = async (
+    project: Omit<Project, "id" | "createdAt" | "updatedAt">
+  ) => {
     try {
       setError(null);
       if (!currentUser) throw new Error("No user logged in");
       const newProject = await api.createProject(project, currentUser.id);
-      setProjects(prev => [...prev, newProject]);
+      setProjects((prev) => [...prev, newProject]);
       setCurrentProject(newProject);
       return newProject;
     } catch (err) {
@@ -219,9 +243,11 @@ export const ProjectProvider: React.FC<{ children: ReactNode }> = ({ children })
     try {
       setError(null);
       const updatedProject = await api.updateProject(id, updates);
-      setProjects(prev => prev.map(p => (p.id === id ? updatedProject : p)));
+      setProjects((prev) =>
+        prev.map((p) => (p.id === id ? updatedProject : p))
+      );
       if (currentProject && currentProject.id === id) {
-         setCurrentProject(updatedProject);
+        setCurrentProject(updatedProject);
       }
       return updatedProject;
     } catch (err) {
@@ -236,10 +262,10 @@ export const ProjectProvider: React.FC<{ children: ReactNode }> = ({ children })
       setError(null);
       if (!currentUser) throw new Error("No user logged in");
       await api.deleteProject(id, currentUser.id);
-      setProjects(prev => prev.filter(p => p.id !== id));
+      setProjects((prev) => prev.filter((p) => p.id !== id));
       if (currentProject?.id === id) {
         // Set the first available project as current, or null if none exist
-        const remainingProjects = projects.filter(p => p.id !== id);
+        const remainingProjects = projects.filter((p) => p.id !== id);
         setCurrentProject(remainingProjects[0] || null);
       }
     } catch (err) {
@@ -250,18 +276,20 @@ export const ProjectProvider: React.FC<{ children: ReactNode }> = ({ children })
   };
 
   // Task management functions
-  const createTask = async (task: Omit<Task, "id" | "createdAt" | "updatedAt">) => {
+  const createTask = async (
+    task: Omit<Task, "id" | "createdAt" | "updatedAt">
+  ) => {
     try {
       setError(null);
       const newTask = await api.createTask(task);
-      setTasks(prev => [...prev, newTask]);
+      setTasks((prev) => [...prev, newTask]);
       // Update current project with the new task
       if (currentProject?.id === task.projectId) {
-        setCurrentProject(prev => {
+        setCurrentProject((prev) => {
           if (!prev) return null;
           return {
             ...prev,
-            tasks: [...prev.tasks, newTask]
+            tasks: [...prev.tasks, newTask],
           };
         });
       }
@@ -279,14 +307,14 @@ export const ProjectProvider: React.FC<{ children: ReactNode }> = ({ children })
     try {
       setError(null);
       const updatedTask = await api.updateTask(id, task);
-      setTasks(prev => prev.map(t => t.id === id ? updatedTask : t));
+      setTasks((prev) => prev.map((t) => (t.id === id ? updatedTask : t)));
       // Update current project with the updated task
       if (currentProject) {
-        setCurrentProject(prev => {
+        setCurrentProject((prev) => {
           if (!prev) return null;
           return {
             ...prev,
-            tasks: prev.tasks.map(t => t.id === id ? updatedTask : t)
+            tasks: prev.tasks.map((t) => (t.id === id ? updatedTask : t)),
           };
         });
       }
@@ -304,14 +332,14 @@ export const ProjectProvider: React.FC<{ children: ReactNode }> = ({ children })
     try {
       setError(null);
       await api.deleteTask(id);
-      setTasks(prev => prev.filter(t => t.id !== id));
+      setTasks((prev) => prev.filter((t) => t.id !== id));
       // Update current project by removing the deleted task
       if (currentProject) {
-        setCurrentProject(prev => {
+        setCurrentProject((prev) => {
           if (!prev) return null;
           return {
             ...prev,
-            tasks: prev.tasks.filter(t => t.id !== id)
+            tasks: prev.tasks.filter((t) => t.id !== id),
           };
         });
       }
@@ -328,24 +356,26 @@ export const ProjectProvider: React.FC<{ children: ReactNode }> = ({ children })
     if (!currentUser) {
       throw new Error("User must be logged in to add comments");
     }
-    
+
     try {
       setError(null);
       const comment = await api.addComment(taskId, {
         content,
-        userId: currentUser.id
+        userId: currentUser.id,
       });
-      
-      setTasks(prev => prev.map(task => {
-        if (task.id === taskId) {
-          return {
-            ...task,
-            comments: [...task.comments, comment]
-          };
-        }
-        return task;
-      }));
-      
+
+      setTasks((prev) =>
+        prev.map((task) => {
+          if (task.id === taskId) {
+            return {
+              ...task,
+              comments: [...task.comments, comment],
+            };
+          }
+          return task;
+        })
+      );
+
       return comment;
     } catch (err) {
       console.error("Error adding comment:", err);
@@ -376,7 +406,7 @@ export const ProjectProvider: React.FC<{ children: ReactNode }> = ({ children })
     loadTasks: async (projectId: string) => {
       // Temporarily set currentProject to the one matching projectId, if not already set
       if (!currentProject || currentProject.id !== projectId) {
-        const project = projects.find(p => p.id === projectId);
+        const project = projects.find((p) => p.id === projectId);
         if (project) setCurrentProject(project);
       }
       // Call the existing loadTasks function
@@ -384,7 +414,9 @@ export const ProjectProvider: React.FC<{ children: ReactNode }> = ({ children })
     },
   };
 
-  return <ProjectContext.Provider value={value}>{children}</ProjectContext.Provider>;
+  return (
+    <ProjectContext.Provider value={value}>{children}</ProjectContext.Provider>
+  );
 };
 
 export const useProject = () => {

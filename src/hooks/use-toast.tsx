@@ -1,4 +1,3 @@
-
 import {
   type ToastActionElement,
   ToastProvider as ToastProviderPrimitive,
@@ -8,7 +7,7 @@ import {
   ToastDescription,
   ToastClose,
   ToastAction,
-} from "@/components/ui/toast";
+} from "../components/ui/toast";
 
 import { createContext, useContext, useState } from "react";
 

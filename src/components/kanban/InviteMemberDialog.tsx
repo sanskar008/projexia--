@@ -21,7 +21,7 @@ import {
   SelectValue,
 } from "../../components/ui/select";
 import { Loader2, UserPlus } from "lucide-react";
-import * as api from "@/services/api";
+import * as api from "../../services/api";
 
 interface InviteMemberDialogProps {
   projectId: string;

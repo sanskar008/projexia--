@@ -5,7 +5,7 @@ import session from "cookie-session";
 import passport from "passport";
 import cors from "cors";
 import "./config.js";
-import authRoutes from "./routes/authRoutes.js";
+import authRoutes from "./routes/authRoutes.ts";
 
 dotenv.config();
 
@@ -43,8 +43,13 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(express.json());
 
 app.use("/auth", authRoutes);
+
+app.get("/auth/login", (req, res) => {
+  res.send("Login endpoint is working (GET). Use POST for login.");
+});
 
 mongoose
   .connect(process.env.MONGO_URI)

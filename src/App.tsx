@@ -6,8 +6,8 @@ import {
 } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ProjectProvider } from "./contexts/ProjectContext";
-import { ToastProvider } from "@/hooks/use-toast";
-import AppLayout from "@/components/layout/AppLayout";
+import { ToastProvider } from "./hooks/use-toast";
+import AppLayout from "./components/layout/AppLayout";
 import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import KanbanBoard from "./pages/KanbanBoard";

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useProject } from "../../contexts/ProjectContext";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "../../hooks/use-toast";
 import {
   Dialog,
   DialogContent,

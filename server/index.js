@@ -16,7 +16,18 @@ const allowedOrigins = [
   "http://localhost:5173",
   "https://projexia-eight.vercel.app",
 ];
+
+// CORS middleware at the very top
 app.use(
+  cors({
+    origin: allowedOrigins,
+    credentials: true,
+  })
+);
+
+// Explicitly handle preflight requests for all routes
+app.options(
+  "*",
   cors({
     origin: allowedOrigins,
     credentials: true,

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useProject } from "@/contexts/ProjectContext";
+import { useProject } from "../../contexts/ProjectContext";
 import { toast } from "@/hooks/use-toast";
 import {
   Dialog,
@@ -31,7 +31,7 @@ import { format } from "date-fns";
 import { CalendarIcon, Loader2, Plus, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
-import { TaskPriority, TaskStatus } from "@/contexts/ProjectContext";
+import { TaskPriority, TaskStatus } from "../../contexts/ProjectContext";
 
 interface AddTaskDialogProps {
   projectId: string;
@@ -52,7 +52,7 @@ const AddTaskDialog: React.FC<AddTaskDialogProps> = ({ projectId }) => {
 
   const handleCreateTask = async (e: React.FormEvent) => {
     e.preventDefault();
-  
+
     if (!title.trim()) {
       toast({
         title: "Error",
@@ -121,7 +121,7 @@ const AddTaskDialog: React.FC<AddTaskDialogProps> = ({ projectId }) => {
       setTags([]);
       setNewTag("");
       setOpen(false);
-      
+
       toast({
         title: "Success",
         description: "Task created successfully",
@@ -146,7 +146,7 @@ const AddTaskDialog: React.FC<AddTaskDialogProps> = ({ projectId }) => {
   };
 
   const handleRemoveTag = (tagToRemove: string) => {
-    setTags(tags.filter(tag => tag !== tagToRemove));
+    setTags(tags.filter((tag) => tag !== tagToRemove));
   };
 
   return (
@@ -196,17 +196,17 @@ const AddTaskDialog: React.FC<AddTaskDialogProps> = ({ projectId }) => {
                 disabled={isSubmitting}
               >
                 <SelectTrigger>
-                <SelectValue placeholder="Select status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="backlog">Backlog</SelectItem>
-                <SelectItem value="todo">To Do</SelectItem>
-                <SelectItem value="in-progress">In Progress</SelectItem>
-                <SelectItem value="review">Review</SelectItem>
-                <SelectItem value="completed">Completed</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+                  <SelectValue placeholder="Select status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="backlog">Backlog</SelectItem>
+                  <SelectItem value="todo">To Do</SelectItem>
+                  <SelectItem value="in-progress">In Progress</SelectItem>
+                  <SelectItem value="review">Review</SelectItem>
+                  <SelectItem value="completed">Completed</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
 
             <div className="space-y-2">
               <Label htmlFor="priority">Priority</Label>
@@ -216,15 +216,15 @@ const AddTaskDialog: React.FC<AddTaskDialogProps> = ({ projectId }) => {
                 disabled={isSubmitting}
               >
                 <SelectTrigger>
-                <SelectValue placeholder="Select priority" />
-              </SelectTrigger>
-              <SelectContent>
+                  <SelectValue placeholder="Select priority" />
+                </SelectTrigger>
+                <SelectContent>
                   <SelectItem value="urgent">Urgent</SelectItem>
                   <SelectItem value="high">High</SelectItem>
                   <SelectItem value="medium">Medium</SelectItem>
-                <SelectItem value="low">Low</SelectItem>
-              </SelectContent>
-            </Select>
+                  <SelectItem value="low">Low</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
 
@@ -257,7 +257,7 @@ const AddTaskDialog: React.FC<AddTaskDialogProps> = ({ projectId }) => {
 
           <div className="space-y-2">
             <Label htmlFor="assignee">Assignee</Label>
-            <Select 
+            <Select
               value={assigneeId}
               onValueChange={setAssigneeId}
               disabled={isSubmitting}
@@ -316,11 +316,11 @@ const AddTaskDialog: React.FC<AddTaskDialogProps> = ({ projectId }) => {
                     >
                       <X className="h-3 w-3" />
                     </button>
-          </div>
+                  </div>
                 ))}
-            </div>
-          )}
-        </div>
+              </div>
+            )}
+          </div>
 
           <div className="flex justify-end gap-2">
             <Button
@@ -340,7 +340,7 @@ const AddTaskDialog: React.FC<AddTaskDialogProps> = ({ projectId }) => {
               ) : (
                 "Create Task"
               )}
-          </Button>
+            </Button>
           </div>
         </form>
       </DialogContent>

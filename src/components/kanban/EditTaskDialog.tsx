@@ -1,12 +1,32 @@
 import React, { useState } from "react";
-import { useProject, Task, TaskStatus, TaskPriority } from "@/contexts/ProjectContext";
-import { DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import {
+  useProject,
+  Task,
+  TaskStatus,
+  TaskPriority,
+} from "../../contexts/ProjectContext";
+import {
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { CalendarIcon, Loader2 } from "lucide-react";
@@ -24,7 +44,9 @@ const EditTaskDialog: React.FC<EditTaskDialogProps> = ({ task, onClose }) => {
   const [description, setDescription] = useState(task.description);
   const [status, setStatus] = useState<TaskStatus>(task.status);
   const [priority, setPriority] = useState<TaskPriority>(task.priority);
-  const [dueDate, setDueDate] = useState<Date | undefined>(new Date(task.dueDate));
+  const [dueDate, setDueDate] = useState<Date | undefined>(
+    new Date(task.dueDate)
+  );
   const [assigneeId, setAssigneeId] = useState<string>(task.assigneeId || "");
   const [tags, setTags] = useState<string[]>(task.tags);
   const [newTag, setNewTag] = useState("");
@@ -60,7 +82,7 @@ const EditTaskDialog: React.FC<EditTaskDialogProps> = ({ task, onClose }) => {
   };
 
   const handleRemoveTag = (tagToRemove: string) => {
-    setTags(tags.filter(tag => tag !== tagToRemove));
+    setTags(tags.filter((tag) => tag !== tagToRemove));
   };
 
   // Read-only view
@@ -73,38 +95,58 @@ const EditTaskDialog: React.FC<EditTaskDialogProps> = ({ task, onClose }) => {
         <div className="space-y-4">
           <div>
             <Label>Title</Label>
-            <div className="border rounded px-3 py-2 bg-muted">{task.title}</div>
+            <div className="border rounded px-3 py-2 bg-muted">
+              {task.title}
+            </div>
           </div>
           <div>
             <Label>Description</Label>
-            <div className="border rounded px-3 py-2 bg-muted whitespace-pre-line">{task.description}</div>
+            <div className="border rounded px-3 py-2 bg-muted whitespace-pre-line">
+              {task.description}
+            </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label>Status</Label>
-              <div className="border rounded px-3 py-2 bg-muted capitalize">{task.status}</div>
+              <div className="border rounded px-3 py-2 bg-muted capitalize">
+                {task.status}
+              </div>
             </div>
             <div>
               <Label>Priority</Label>
-              <div className="border rounded px-3 py-2 bg-muted capitalize">{task.priority}</div>
+              <div className="border rounded px-3 py-2 bg-muted capitalize">
+                {task.priority}
+              </div>
             </div>
           </div>
           <div>
             <Label>Due Date</Label>
-            <div className="border rounded px-3 py-2 bg-muted">{task.dueDate ? format(new Date(task.dueDate), "PPP") : "-"}</div>
+            <div className="border rounded px-3 py-2 bg-muted">
+              {task.dueDate ? format(new Date(task.dueDate), "PPP") : "-"}
+            </div>
           </div>
           <div>
             <Label>Assignee</Label>
             <div className="border rounded px-3 py-2 bg-muted">
-              {currentProject?.members.find(m => m.id === task.assigneeId)?.name || "Unassigned"}
+              {currentProject?.members.find((m) => m.id === task.assigneeId)
+                ?.name || "Unassigned"}
             </div>
           </div>
           <div>
             <Label>Tags</Label>
             <div className="flex flex-wrap gap-2 mt-1">
-              {task.tags.length > 0 ? task.tags.map(tag => (
-                <span key={tag} className="bg-secondary text-secondary-foreground px-2 py-1 rounded-md text-sm">{tag}</span>
-              )) : <span className="text-muted-foreground">No tags</span>}
+              {task.tags.length > 0 ? (
+                task.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="bg-secondary text-secondary-foreground px-2 py-1 rounded-md text-sm"
+                  >
+                    {tag}
+                  </span>
+                ))
+              ) : (
+                <span className="text-muted-foreground">No tags</span>
+              )}
             </div>
           </div>
         </div>
@@ -280,9 +322,18 @@ const EditTaskDialog: React.FC<EditTaskDialogProps> = ({ task, onClose }) => {
         </div>
         <DialogFooter>
           <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Save Changes"}
+            {isSubmitting ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              "Save Changes"
+            )}
           </Button>
-          <Button type="button" variant="outline" onClick={() => setEditMode(false)} disabled={isSubmitting}>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => setEditMode(false)}
+            disabled={isSubmitting}
+          >
             Cancel
           </Button>
         </DialogFooter>
@@ -291,4 +342,4 @@ const EditTaskDialog: React.FC<EditTaskDialogProps> = ({ task, onClose }) => {
   );
 };
 
-export default EditTaskDialog; 
+export default EditTaskDialog;

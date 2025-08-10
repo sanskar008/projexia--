@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useProject } from "@/contexts/ProjectContext";
+import { useProject } from "../../contexts/ProjectContext";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -17,13 +17,28 @@ import {
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { toast } from "@/hooks/use-toast";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
 const AppLayout = ({ children }: { children: React.ReactNode }) => {
-  const { currentUser, projects, currentProject, createProject, isLoading, logout, setCurrentProject, deleteProject } = useProject();
+  const {
+    currentUser,
+    projects,
+    currentProject,
+    createProject,
+    isLoading,
+    logout,
+    setCurrentProject,
+    deleteProject,
+  } = useProject();
   const location = useLocation();
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = React.useState(false);
@@ -40,7 +55,8 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
     "#3b82f6", // blue
     "#a855f7", // purple
   ];
-  const [showAdminDeleteDialog, setShowAdminDeleteDialog] = React.useState(false);
+  const [showAdminDeleteDialog, setShowAdminDeleteDialog] =
+    React.useState(false);
 
   const navigation = [
     { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
@@ -89,13 +105,17 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
         name: newProjectName.trim(),
         description: newProjectDescription.trim(),
         color: newProjectColor,
-        members: currentUser ? [{
-          id: currentUser.id,
-          name: currentUser.name,
-          email: currentUser.email,
-          role: "admin",
-          avatarUrl: currentUser.avatarUrl,
-        }] : [],
+        members: currentUser
+          ? [
+              {
+                id: currentUser.id,
+                name: currentUser.name,
+                email: currentUser.email,
+                role: "admin",
+                avatarUrl: currentUser.avatarUrl,
+              },
+            ]
+          : [],
         tasks: [],
       });
       setNewProjectName("");
@@ -117,15 +137,30 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
   };
 
   const handleDeleteProject = async (projectId: string) => {
-    if (!window.confirm('Are you sure you want to delete this project? This action cannot be undone.')) return;
+    if (
+      !window.confirm(
+        "Are you sure you want to delete this project? This action cannot be undone."
+      )
+    )
+      return;
     try {
       await deleteProject(projectId);
-      toast({ title: 'Project deleted', description: 'The project was deleted successfully.' });
+      toast({
+        title: "Project deleted",
+        description: "The project was deleted successfully.",
+      });
     } catch (error: any) {
-      if (typeof error.message === 'string' && error.message.includes('Only the admin can delete this project')) {
+      if (
+        typeof error.message === "string" &&
+        error.message.includes("Only the admin can delete this project")
+      ) {
         setShowAdminDeleteDialog(true);
       } else {
-        toast({ title: 'Error', description: 'Failed to delete project.', variant: 'destructive' });
+        toast({
+          title: "Error",
+          description: "Failed to delete project.",
+          variant: "destructive",
+        });
       }
     }
   };
@@ -133,14 +168,19 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="flex min-h-screen bg-background">
       {/* Admin Delete Dialog */}
-      <Dialog open={showAdminDeleteDialog} onOpenChange={setShowAdminDeleteDialog}>
+      <Dialog
+        open={showAdminDeleteDialog}
+        onOpenChange={setShowAdminDeleteDialog}
+      >
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Permission Denied</DialogTitle>
           </DialogHeader>
           <div>Only the admin can delete this project.</div>
           <div className="flex justify-end mt-4">
-            <Button onClick={() => setShowAdminDeleteDialog(false)} autoFocus>OK</Button>
+            <Button onClick={() => setShowAdminDeleteDialog(false)} autoFocus>
+              OK
+            </Button>
           </div>
         </DialogContent>
       </Dialog>
@@ -150,7 +190,7 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
           "bg-card border-r border-border transition-all duration-300 ease-in-out flex flex-col h-screen sticky top-0 left-0 z-30",
           collapsed ? "w-16" : "w-64"
         )}
-        style={{ position: 'sticky', top: 0, height: '100vh' }}
+        style={{ position: "sticky", top: 0, height: "100vh" }}
       >
         {/* Sidebar Header */}
         <div className="flex items-center justify-between p-4">
@@ -198,7 +238,10 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
         <div className="flex-shrink-0">
           <div className="p-4 flex items-center justify-between">
             {!collapsed && <h3 className="text-sm font-medium">Projects</h3>}
-            <Dialog open={showNewProjectDialog} onOpenChange={setShowNewProjectDialog}>
+            <Dialog
+              open={showNewProjectDialog}
+              onOpenChange={setShowNewProjectDialog}
+            >
               <DialogTrigger asChild>
                 <Button
                   variant="ghost"
@@ -239,7 +282,11 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
                         <button
                           key={color}
                           type="button"
-                          className={`w-7 h-7 rounded-full border-2 transition-colors ${newProjectColor === color ? 'border-primary' : 'border-transparent'} focus:outline-none`}
+                          className={`w-7 h-7 rounded-full border-2 transition-colors ${
+                            newProjectColor === color
+                              ? "border-primary"
+                              : "border-transparent"
+                          } focus:outline-none`}
                           style={{ background: color }}
                           onClick={() => setNewProjectColor(color)}
                         />
@@ -268,8 +315,13 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
                   )}
                   onClick={() => setCurrentProject(project)}
                 >
-                  <div className="w-2 h-2 rounded-full mr-2" style={{ background: project.color }}></div>
-                  {!collapsed && <span className="truncate">{project.name}</span>}
+                  <div
+                    className="w-2 h-2 rounded-full mr-2"
+                    style={{ background: project.color }}
+                  ></div>
+                  {!collapsed && (
+                    <span className="truncate">{project.name}</span>
+                  )}
                 </Link>
                 {!collapsed && (
                   <Button
@@ -314,9 +366,7 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 overflow-auto">
-        {children}
-      </div>
+      <div className="flex-1 overflow-auto">{children}</div>
     </div>
   );
 };

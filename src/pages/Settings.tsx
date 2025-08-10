@@ -1,10 +1,15 @@
-
 import React from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
-import { useProject } from "@/contexts/ProjectContext";
+import { useProject } from "../contexts/ProjectContext";
 import { toast } from "@/hooks/use-toast";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import * as api from "@/services/api";
@@ -12,12 +17,12 @@ import { useState } from "react";
 
 const avatarOptions = [
   // Dicebear Avataaars with different seeds
-  `https://api.dicebear.com/7.x/avataaars/svg?seed=cat` ,
-  `https://api.dicebear.com/7.x/avataaars/svg?seed=dog` ,
-  `https://api.dicebear.com/7.x/avataaars/svg?seed=fox` ,
-  `https://api.dicebear.com/7.x/avataaars/svg?seed=owl` ,
-  `https://api.dicebear.com/7.x/avataaars/svg?seed=lion` ,
-  `https://api.dicebear.com/7.x/avataaars/svg?seed=koala` ,
+  `https://api.dicebear.com/7.x/avataaars/svg?seed=cat`,
+  `https://api.dicebear.com/7.x/avataaars/svg?seed=dog`,
+  `https://api.dicebear.com/7.x/avataaars/svg?seed=fox`,
+  `https://api.dicebear.com/7.x/avataaars/svg?seed=owl`,
+  `https://api.dicebear.com/7.x/avataaars/svg?seed=lion`,
+  `https://api.dicebear.com/7.x/avataaars/svg?seed=koala`,
 ];
 
 const Settings = () => {
@@ -34,7 +39,11 @@ const Settings = () => {
       toast({ title: "Avatar updated!" });
       window.location.reload();
     } catch {
-      toast({ title: "Error", description: "Failed to update avatar.", variant: "destructive" });
+      toast({
+        title: "Error",
+        description: "Failed to update avatar.",
+        variant: "destructive",
+      });
     } finally {
       setIsSaving(false);
       setShowAvatarOptions(false);
@@ -43,8 +52,10 @@ const Settings = () => {
 
   const handleNotificationToggle = (enabled: boolean) => {
     toast({
-      title: `Notifications ${enabled ? 'enabled' : 'disabled'}`,
-      description: `You will ${enabled ? 'now' : 'no longer'} receive notifications.`
+      title: `Notifications ${enabled ? "enabled" : "disabled"}`,
+      description: `You will ${
+        enabled ? "now" : "no longer"
+      } receive notifications.`,
     });
   };
 
@@ -56,7 +67,9 @@ const Settings = () => {
         <Card>
           <CardHeader>
             <CardTitle>Profile Settings</CardTitle>
-            <CardDescription>Manage your account settings and preferences.</CardDescription>
+            <CardDescription>
+              Manage your account settings and preferences.
+            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-center justify-between">
@@ -66,7 +79,10 @@ const Settings = () => {
                   Receive notifications about your tasks and projects
                 </p>
               </div>
-              <Switch id="notifications" onCheckedChange={handleNotificationToggle} />
+              <Switch
+                id="notifications"
+                onCheckedChange={handleNotificationToggle}
+              />
             </div>
           </CardContent>
         </Card>
@@ -81,9 +97,17 @@ const Settings = () => {
               <div className="flex flex-col items-center">
                 <Avatar className="h-16 w-16 mb-2">
                   <AvatarImage src={selectedAvatar} alt={currentUser.name} />
-                  <AvatarFallback>{currentUser.name.split(' ').map(n => n[0]).join('').toUpperCase()}</AvatarFallback>
+                  <AvatarFallback>
+                    {currentUser.name
+                      .split(" ")
+                      .map((n) => n[0])
+                      .join("")
+                      .toUpperCase()}
+                  </AvatarFallback>
                 </Avatar>
-                <span className="text-xs text-muted-foreground">Your Avatar</span>
+                <span className="text-xs text-muted-foreground">
+                  Your Avatar
+                </span>
               </div>
               <div className="flex flex-col gap-2">
                 <Button
@@ -99,7 +123,11 @@ const Settings = () => {
                     {avatarOptions.map((url) => (
                       <button
                         key={url}
-                        className={`border-2 rounded-full p-0.5 transition-colors ${selectedAvatar === url ? 'border-primary' : 'border-transparent'} hover:border-primary`}
+                        className={`border-2 rounded-full p-0.5 transition-colors ${
+                          selectedAvatar === url
+                            ? "border-primary"
+                            : "border-transparent"
+                        } hover:border-primary`}
                         onClick={() => handleAvatarChange(url)}
                         disabled={isSaving}
                         type="button"
@@ -129,16 +157,18 @@ const Settings = () => {
         <Card>
           <CardHeader>
             <CardTitle>Danger Zone</CardTitle>
-            <CardDescription>Irreversible and destructive actions</CardDescription>
+            <CardDescription>
+              Irreversible and destructive actions
+            </CardDescription>
           </CardHeader>
           <CardContent>
-            <Button 
+            <Button
               variant="destructive"
               onClick={() => {
                 toast({
                   title: "Action required",
                   description: "Please contact support to delete your account.",
-                  variant: "destructive"
+                  variant: "destructive",
                 });
               }}
             >

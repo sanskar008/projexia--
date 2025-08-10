@@ -1,4 +1,9 @@
-import { Project, Task, Comment, ProjectMember } from "@/contexts/ProjectContext";
+import {
+  Project,
+  Task,
+  Comment,
+  ProjectMember,
+} from "../contexts/ProjectContext";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
@@ -12,18 +17,21 @@ const handleResponse = async (response: Response) => {
 };
 
 // Project API
-export const fetchProjects = async (userId?: string, email?: string): Promise<Project[]> => {
+export const fetchProjects = async (
+  userId?: string,
+  email?: string
+): Promise<Project[]> => {
   try {
     let url = `${API_URL}/projects`;
     const params = [];
     if (userId) params.push(`userId=${encodeURIComponent(userId)}`);
     if (email) params.push(`email=${encodeURIComponent(email)}`);
-    if (params.length > 0) url += `?${params.join('&')}`;
-    console.log('Fetching projects from:', url);
+    if (params.length > 0) url += `?${params.join("&")}`;
+    console.log("Fetching projects from:", url);
     const response = await fetch(url, {
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        Accept: "application/json",
+        "Content-Type": "application/json",
       },
     });
     const projects = await handleResponse(response);
@@ -51,7 +59,10 @@ export const fetchProjectById = async (id: string): Promise<Project> => {
   }
 };
 
-export const createProject = async (project: Omit<Project, "id" | "createdAt" | "updatedAt">, creatorId: string): Promise<any> => {
+export const createProject = async (
+  project: Omit<Project, "id" | "createdAt" | "updatedAt">,
+  creatorId: string
+): Promise<any> => {
   try {
     const response = await fetch(`${API_URL}/projects?userId=${creatorId}`, {
       method: "POST",
@@ -68,7 +79,10 @@ export const createProject = async (project: Omit<Project, "id" | "createdAt" | 
   }
 };
 
-export const updateProject = async (id: string, updates: Partial<Project>): Promise<any> => {
+export const updateProject = async (
+  id: string,
+  updates: Partial<Project>
+): Promise<any> => {
   try {
     const response = await fetch(`${API_URL}/projects/${id}`, {
       method: "PUT",
@@ -84,11 +98,17 @@ export const updateProject = async (id: string, updates: Partial<Project>): Prom
   }
 };
 
-export const deleteProject = async (id: string, userId: string): Promise<void> => {
+export const deleteProject = async (
+  id: string,
+  userId: string
+): Promise<void> => {
   try {
-    const response = await fetch(`${API_URL}/projects/${id}?userId=${encodeURIComponent(userId)}`, {
-      method: "DELETE",
-    });
+    const response = await fetch(
+      `${API_URL}/projects/${id}?userId=${encodeURIComponent(userId)}`,
+      {
+        method: "DELETE",
+      }
+    );
     if (!response.ok) {
       const errorText = await response.text();
       throw new Error(errorText || "Failed to delete project");
@@ -100,12 +120,14 @@ export const deleteProject = async (id: string, userId: string): Promise<void> =
 };
 
 // Task API
-export const fetchTasksByProject = async (projectId: string): Promise<Task[]> => {
+export const fetchTasksByProject = async (
+  projectId: string
+): Promise<Task[]> => {
   try {
     const response = await fetch(`${API_URL}/tasks/project/${projectId}`, {
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        Accept: "application/json",
+        "Content-Type": "application/json",
       },
     });
     const tasks = await handleResponse(response);
@@ -116,7 +138,9 @@ export const fetchTasksByProject = async (projectId: string): Promise<Task[]> =>
   }
 };
 
-export const createTask = async (task: Omit<Task, "id" | "createdAt" | "updatedAt" | "comments">): Promise<any> => {
+export const createTask = async (
+  task: Omit<Task, "id" | "createdAt" | "updatedAt" | "comments">
+): Promise<any> => {
   try {
     const response = await fetch(`${API_URL}/tasks`, {
       method: "POST",
@@ -133,7 +157,10 @@ export const createTask = async (task: Omit<Task, "id" | "createdAt" | "updatedA
   }
 };
 
-export const updateTask = async (id: string, updates: Partial<Task>): Promise<any> => {
+export const updateTask = async (
+  id: string,
+  updates: Partial<Task>
+): Promise<any> => {
   try {
     const response = await fetch(`${API_URL}/tasks/${id}`, {
       method: "PUT",
@@ -163,7 +190,10 @@ export const deleteTask = async (id: string): Promise<void> => {
   }
 };
 
-export const addComment = async (taskId: string, comment: { content: string; userId: string }): Promise<any> => {
+export const addComment = async (
+  taskId: string,
+  comment: { content: string; userId: string }
+): Promise<any> => {
   try {
     const response = await fetch(`${API_URL}/tasks/${taskId}/comments`, {
       method: "POST",
@@ -204,14 +234,20 @@ export const removeProjectMember = async (
   memberId: string
 ): Promise<void> => {
   try {
-    const response = await fetch(`${API_URL}/projects/${projectId}/members/${memberId}`, {
-      method: "DELETE",
-    });
+    const response = await fetch(
+      `${API_URL}/projects/${projectId}/members/${memberId}`,
+      {
+        method: "DELETE",
+      }
+    );
     if (!response.ok) {
       throw new Error("Failed to remove project member");
     }
   } catch (error) {
-    console.error(`Error removing member ${memberId} from project ${projectId}:`, error);
+    console.error(
+      `Error removing member ${memberId} from project ${projectId}:`,
+      error
+    );
     throw error;
   }
 };
@@ -222,16 +258,22 @@ export const updateProjectMemberRole = async (
   role: string
 ): Promise<ProjectMember> => {
   try {
-    const response = await fetch(`${API_URL}/projects/${projectId}/members/${memberId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ role }),
-    });
+    const response = await fetch(
+      `${API_URL}/projects/${projectId}/members/${memberId}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ role }),
+      }
+    );
     return await handleResponse(response);
   } catch (error) {
-    console.error(`Error updating member role for ${memberId} in project ${projectId}:`, error);
+    console.error(
+      `Error updating member role for ${memberId} in project ${projectId}:`,
+      error
+    );
     throw error;
   }
 };
@@ -239,7 +281,7 @@ export const updateProjectMemberRole = async (
 // Group Chat API
 export const fetchProjectChat = async (projectId: string) => {
   const response = await fetch(`${API_URL}/projects/${projectId}/chat`);
-  if (!response.ok) throw new Error('Failed to fetch chat messages');
+  if (!response.ok) throw new Error("Failed to fetch chat messages");
   return response.json();
 };
 
@@ -248,20 +290,20 @@ export const postProjectChatMessage = async (
   message: { userId: string; userName: string; content: string }
 ) => {
   const response = await fetch(`${API_URL}/projects/${projectId}/chat`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(message),
   });
-  if (!response.ok) throw new Error('Failed to send chat message');
+  if (!response.ok) throw new Error("Failed to send chat message");
   return response.json();
 };
 
 export const updateUserAvatar = async (userId: string, avatarUrl: string) => {
   const response = await fetch(`${API_URL}/auth/me/avatar`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ userId, avatarUrl }),
   });
-  if (!response.ok) throw new Error('Failed to update avatar');
+  if (!response.ok) throw new Error("Failed to update avatar");
   return response.json();
 };

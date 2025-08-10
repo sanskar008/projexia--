@@ -1,16 +1,28 @@
-
 import React, { useState } from "react";
-import { useProject, Task } from "@/contexts/ProjectContext";
+import { useProject, Task } from "../contexts/ProjectContext";
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, Plus } from "lucide-react";
+import {
+  Calendar as CalendarIcon,
+  ChevronLeft,
+  ChevronRight,
+  Plus,
+} from "lucide-react";
 
 const Calendar = () => {
   const { projects } = useProject();
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(
+    new Date()
+  );
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
 
@@ -67,10 +79,14 @@ const Calendar = () => {
   const getDayContent = (day: Date) => {
     const dayTasks = getDayTasks(day);
     const isCurrentMonth = day.getMonth() === currentMonth.getMonth();
-    
+
     return (
       <div className="w-full h-full">
-        <div className={`text-center ${isCurrentMonth ? "font-medium" : "text-muted-foreground"}`}>
+        <div
+          className={`text-center ${
+            isCurrentMonth ? "font-medium" : "text-muted-foreground"
+          }`}
+        >
           {day.getDate()}
         </div>
         {dayTasks.length > 0 && isCurrentMonth && (
@@ -99,11 +115,15 @@ const Calendar = () => {
   };
 
   const handlePrevMonth = () => {
-    setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1));
+    setCurrentMonth(
+      new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1)
+    );
   };
 
   const handleNextMonth = () => {
-    setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1));
+    setCurrentMonth(
+      new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1)
+    );
   };
 
   return (
@@ -155,11 +175,9 @@ const Calendar = () => {
           <CardHeader>
             <CardTitle className="flex items-center">
               <CalendarIcon className="h-5 w-5 mr-2" />
-              {selectedDate ? (
-                formatDate(selectedDate.toISOString())
-              ) : (
-                "No Date Selected"
-              )}
+              {selectedDate
+                ? formatDate(selectedDate.toISOString())
+                : "No Date Selected"}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -191,7 +209,7 @@ const Calendar = () => {
                             </p>
                           </div>
                         </DialogTrigger>
-                        
+
                         <DialogContent className="sm:max-w-[600px]">
                           <DialogHeader>
                             <DialogTitle>{task.title}</DialogTitle>
@@ -259,9 +277,8 @@ const Calendar = () => {
                                       {
                                         projects
                                           .flatMap((p) => p.members)
-                                          .find(
-                                            (m) => m.id === task.assigneeId
-                                          )?.name
+                                          .find((m) => m.id === task.assigneeId)
+                                          ?.name
                                       }
                                     </span>
                                   </div>

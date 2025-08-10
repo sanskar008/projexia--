@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useProject } from "@/contexts/ProjectContext";
+import { useProject } from "../../contexts/ProjectContext";
 import { toast } from "@/hooks/use-toast";
 import {
   Dialog,
@@ -68,7 +68,10 @@ const InviteMemberDialog = ({ projectId }: InviteMemberDialogProps) => {
       console.error("Error inviting member:", error);
       toast({
         title: "Error",
-        description: error instanceof Error ? error.message : "Failed to invite member. Please try again.",
+        description:
+          error instanceof Error
+            ? error.message
+            : "Failed to invite member. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -107,10 +110,7 @@ const InviteMemberDialog = ({ projectId }: InviteMemberDialogProps) => {
             </div>
           </div>
           <DialogFooter>
-            <Button
-              type="submit"
-              disabled={isSubmitting}
-            >
+            <Button type="submit" disabled={isSubmitting}>
               {isSubmitting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -127,4 +127,4 @@ const InviteMemberDialog = ({ projectId }: InviteMemberDialogProps) => {
   );
 };
 
-export default InviteMemberDialog; 
+export default InviteMemberDialog;

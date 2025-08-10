@@ -1,30 +1,29 @@
-
 import React from "react";
-import { useProject, ProjectMember } from "@/contexts/ProjectContext";
+import { useProject, ProjectMember } from "../contexts/ProjectContext";
 import { useState } from "react";
 import { toast } from "@/hooks/use-toast";
 import * as api from "@/services/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableHeader, 
-  TableRow 
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from "@/components/ui/table";
-import { 
-  Plus, 
-  Mail, 
-  UserPlus, 
-  MoreHorizontal, 
-  Shield, 
-  User, 
-  Eye 
+import {
+  Plus,
+  Mail,
+  UserPlus,
+  MoreHorizontal,
+  Shield,
+  User,
+  Eye,
 } from "lucide-react";
-import { 
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -33,7 +32,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { useNavigate } from "react-router-dom";
 
 const TeamPage = () => {
@@ -46,12 +51,14 @@ const TeamPage = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
 
   // Get members from the current project or all projects
-  const members = currentProject 
-    ? currentProject.members 
-    : projects.flatMap(project => project.members)
-      .filter((member, index, self) => 
-        index === self.findIndex(m => m.id === member.id)
-      );
+  const members = currentProject
+    ? currentProject.members
+    : projects
+        .flatMap((project) => project.members)
+        .filter(
+          (member, index, self) =>
+            index === self.findIndex((m) => m.id === member.id)
+        );
 
   const getInitials = (name: string) => {
     return name
@@ -77,17 +84,11 @@ const TeamPage = () => {
   const getRoleBadge = (role: string) => {
     switch (role) {
       case "admin":
-        return (
-          <Badge variant="default">Admin</Badge>
-        );
+        return <Badge variant="default">Admin</Badge>;
       case "member":
-        return (
-          <Badge variant="secondary">Member</Badge>
-        );
+        return <Badge variant="secondary">Member</Badge>;
       case "viewer":
-        return (
-          <Badge variant="outline">Viewer</Badge>
-        );
+        return <Badge variant="outline">Viewer</Badge>;
       default:
         return null;
     }
@@ -96,17 +97,16 @@ const TeamPage = () => {
   // Count the number of tasks assigned to each member
   const getTaskCount = (memberId: string) => {
     return projects
-      .flatMap(project => project.tasks)
-      .filter(task => task.assigneeId === memberId)
-      .length;
+      .flatMap((project) => project.tasks)
+      .filter((task) => task.assigneeId === memberId).length;
   };
 
   // Get member's role in a specific project
   const getMemberRole = (projectId: string, memberId: string) => {
-    const project = projects.find(p => p.id === projectId);
+    const project = projects.find((p) => p.id === projectId);
     if (!project) return null;
-    
-    const member = project.members.find(m => m.id === memberId);
+
+    const member = project.members.find((m) => m.id === memberId);
     return member ? member.role : null;
   };
 
@@ -115,9 +115,16 @@ const TeamPage = () => {
     try {
       await api.updateProjectMemberRole(currentProject.id, memberId, newRole);
       await updateProject(currentProject.id, {});
-      toast({ title: "Role updated", description: "Member role updated successfully." });
+      toast({
+        title: "Role updated",
+        description: "Member role updated successfully.",
+      });
     } catch (error) {
-      toast({ title: "Error", description: "Failed to update role.", variant: "destructive" });
+      toast({
+        title: "Error",
+        description: "Failed to update role.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -127,10 +134,17 @@ const TeamPage = () => {
     try {
       await api.removeProjectMember(currentProject.id, memberId);
       await updateProject(currentProject.id, {});
-      toast({ title: "Member removed", description: "The member was removed from the project." });
+      toast({
+        title: "Member removed",
+        description: "The member was removed from the project.",
+      });
       navigate("/team");
     } catch (error) {
-      toast({ title: "Error", description: "Failed to remove member.", variant: "destructive" });
+      toast({
+        title: "Error",
+        description: "Failed to remove member.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -153,23 +167,40 @@ const TeamPage = () => {
               onSubmit={async (e) => {
                 e.preventDefault();
                 if (!addEmail.trim()) {
-                  toast({ title: "Missing fields", description: "Please provide an email.", variant: "destructive" });
+                  toast({
+                    title: "Missing fields",
+                    description: "Please provide an email.",
+                    variant: "destructive",
+                  });
                   return;
                 }
                 if (!currentProject) {
-                  toast({ title: "No project selected", description: "Select a project to add members.", variant: "destructive" });
+                  toast({
+                    title: "No project selected",
+                    description: "Select a project to add members.",
+                    variant: "destructive",
+                  });
                   return;
                 }
                 setIsAdding(true);
                 try {
-                  await api.inviteProjectMember(currentProject.id, { email: addEmail.trim() });
+                  await api.inviteProjectMember(currentProject.id, {
+                    email: addEmail.trim(),
+                  });
                   await updateProject(currentProject.id, {});
                   setAddEmail("");
                   setDialogOpen(false);
-                  toast({ title: "Member added", description: "The member was added to the project." });
+                  toast({
+                    title: "Member added",
+                    description: "The member was added to the project.",
+                  });
                   navigate("/team");
                 } catch (error) {
-                  toast({ title: "Error", description: "Failed to add member.", variant: "destructive" });
+                  toast({
+                    title: "Error",
+                    description: "Failed to add member.",
+                    variant: "destructive",
+                  });
                 } finally {
                   setIsAdding(false);
                 }
@@ -179,7 +210,7 @@ const TeamPage = () => {
                 type="email"
                 placeholder="Email"
                 value={addEmail}
-                onChange={e => setAddEmail(e.target.value)}
+                onChange={(e) => setAddEmail(e.target.value)}
                 className="border rounded px-2 py-1 text-sm"
                 disabled={isAdding}
                 required
@@ -200,32 +231,40 @@ const TeamPage = () => {
           <CardContent>
             <div className="text-3xl font-bold">{members.length}</div>
             <p className="text-xs text-muted-foreground mt-1">
-              {members.filter(m => m.role === "admin").length} administrators
+              {members.filter((m) => m.role === "admin").length} administrators
             </p>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Active Projects</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Active Projects
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold">{projects.length}</div>
             <p className="text-xs text-muted-foreground mt-1">
-              {projects.reduce((acc, project) => acc + project.tasks.length, 0)} tasks in total
+              {projects.reduce((acc, project) => acc + project.tasks.length, 0)}{" "}
+              tasks in total
             </p>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium">Average Tasks</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold">
-              {members.length > 0 
-                ? Math.round(projects.reduce((acc, project) => 
-                    acc + project.tasks.filter(t => t.assigneeId).length, 0) / members.length) 
+              {members.length > 0
+                ? Math.round(
+                    projects.reduce(
+                      (acc, project) =>
+                        acc + project.tasks.filter((t) => t.assigneeId).length,
+                      0
+                    ) / members.length
+                  )
                 : 0}
             </div>
             <p className="text-xs text-muted-foreground mt-1">
@@ -257,7 +296,9 @@ const TeamPage = () => {
                     <div className="flex items-center">
                       <Avatar className="h-8 w-8 mr-2">
                         <AvatarImage src={member.avatarUrl} alt={member.name} />
-                        <AvatarFallback>{getInitials(member.name)}</AvatarFallback>
+                        <AvatarFallback>
+                          {getInitials(member.name)}
+                        </AvatarFallback>
                       </Avatar>
                       <div>
                         <div className="font-medium">{member.name}</div>
@@ -290,11 +331,26 @@ const TeamPage = () => {
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuLabel>Change Role</DropdownMenuLabel>
-                        <DropdownMenuItem onClick={() => handleChangeRole(member.id, "admin")}>Admin</DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleChangeRole(member.id, "member")}>Member</DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleChangeRole(member.id, "viewer")}>Viewer</DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => handleChangeRole(member.id, "admin")}
+                        >
+                          Admin
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => handleChangeRole(member.id, "member")}
+                        >
+                          Member
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => handleChangeRole(member.id, "viewer")}
+                        >
+                          Viewer
+                        </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem className="text-destructive" onClick={() => handleRemoveMember(member.id)}>
+                        <DropdownMenuItem
+                          className="text-destructive"
+                          onClick={() => handleRemoveMember(member.id)}
+                        >
                           Remove
                         </DropdownMenuItem>
                       </DropdownMenuContent>
@@ -316,7 +372,7 @@ const TeamPage = () => {
             <TableHeader>
               <TableRow>
                 <TableHead>Member</TableHead>
-                {projects.map(project => (
+                {projects.map((project) => (
                   <TableHead key={project.id}>{project.name}</TableHead>
                 ))}
               </TableRow>
@@ -328,18 +384,24 @@ const TeamPage = () => {
                     <div className="flex items-center">
                       <Avatar className="h-6 w-6 mr-2">
                         <AvatarImage src={member.avatarUrl} alt={member.name} />
-                        <AvatarFallback>{getInitials(member.name)}</AvatarFallback>
+                        <AvatarFallback>
+                          {getInitials(member.name)}
+                        </AvatarFallback>
                       </Avatar>
                       <div className="font-medium truncate max-w-[140px]">
                         {member.name}
                       </div>
                     </div>
                   </TableCell>
-                  {projects.map(project => (
+                  {projects.map((project) => (
                     <TableCell key={project.id}>
                       {getMemberRole(project.id, member.id) ? (
-                        <Badge 
-                          variant={getMemberRole(project.id, member.id) === "admin" ? "default" : "outline"} 
+                        <Badge
+                          variant={
+                            getMemberRole(project.id, member.id) === "admin"
+                              ? "default"
+                              : "outline"
+                          }
                           className="truncate max-w-[120px]"
                         >
                           {getMemberRole(project.id, member.id)}

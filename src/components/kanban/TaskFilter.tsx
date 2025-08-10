@@ -1,9 +1,8 @@
-
 import React from "react";
 import { Search, Filter, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { 
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuCheckboxItem,
@@ -12,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
-import { TaskPriority } from "@/contexts/ProjectContext";
+import { TaskPriority } from "../../contexts/ProjectContext";
 
 interface TaskFilterProps {
   searchTerm: string;
@@ -37,7 +36,7 @@ const TaskFilter: React.FC<TaskFilterProps> = ({
 
   const togglePriority = (priority: TaskPriority) => {
     if (selectedPriorities.includes(priority)) {
-      setSelectedPriorities(selectedPriorities.filter(p => p !== priority));
+      setSelectedPriorities(selectedPriorities.filter((p) => p !== priority));
     } else {
       setSelectedPriorities([...selectedPriorities, priority]);
     }
@@ -45,7 +44,7 @@ const TaskFilter: React.FC<TaskFilterProps> = ({
 
   const toggleTag = (tag: string) => {
     if (selectedTags.includes(tag)) {
-      setSelectedTags(selectedTags.filter(t => t !== tag));
+      setSelectedTags(selectedTags.filter((t) => t !== tag));
     } else {
       setSelectedTags([...selectedTags, tag]);
     }
@@ -59,11 +58,16 @@ const TaskFilter: React.FC<TaskFilterProps> = ({
 
   const getPriorityVariant = (priority: TaskPriority) => {
     switch (priority) {
-      case "urgent": return "destructive" as const;
-      case "high": return "warning" as const;
-      case "medium": return "secondary" as const;
-      case "low": return "info" as const;
-      default: return "secondary" as const;
+      case "urgent":
+        return "destructive" as const;
+      case "high":
+        return "warning" as const;
+      case "medium":
+        return "secondary" as const;
+      case "low":
+        return "info" as const;
+      default:
+        return "secondary" as const;
     }
   };
 
@@ -95,7 +99,9 @@ const TaskFilter: React.FC<TaskFilterProps> = ({
             <Filter className="h-4 w-4" />
             Priority
             {selectedPriorities.length > 0 && (
-              <Badge variant="secondary" size="sm">{selectedPriorities.length}</Badge>
+              <Badge variant="secondary" size="sm">
+                {selectedPriorities.length}
+              </Badge>
             )}
           </Button>
         </DropdownMenuTrigger>
@@ -122,7 +128,9 @@ const TaskFilter: React.FC<TaskFilterProps> = ({
             <Filter className="h-4 w-4" />
             Tags
             {selectedTags.length > 0 && (
-              <Badge variant="secondary" size="sm">{selectedTags.length}</Badge>
+              <Badge variant="secondary" size="sm">
+                {selectedTags.length}
+              </Badge>
             )}
           </Button>
         </DropdownMenuTrigger>
@@ -147,7 +155,9 @@ const TaskFilter: React.FC<TaskFilterProps> = ({
         </DropdownMenuContent>
       </DropdownMenu>
 
-      {(searchTerm || selectedPriorities.length > 0 || selectedTags.length > 0) && (
+      {(searchTerm ||
+        selectedPriorities.length > 0 ||
+        selectedTags.length > 0) && (
         <Button variant="ghost" size="sm" onClick={clearFilters}>
           <X className="h-4 w-4 mr-1" />
           Clear filters

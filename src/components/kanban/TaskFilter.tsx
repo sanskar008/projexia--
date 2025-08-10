@@ -1,7 +1,7 @@
 import React from "react";
 import { Search, Filter, X } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Input } from "../../components/ui/input";
+import { Button } from "../../components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,8 +9,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Badge } from "@/components/ui/badge";
+} from "../../components/ui/dropdown-menu";
+import { Badge } from "../../components/ui/badge";
 import { TaskPriority } from "../../contexts/ProjectContext";
 
 interface TaskFilterProps {

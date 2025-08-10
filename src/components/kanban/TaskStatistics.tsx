@@ -2,8 +2,13 @@ import React from "react";
 // Update the import path below to the correct location of ProjectContext
 // Example: import { Task } from "../../contexts/ProjectContext";
 import { Task } from "../../contexts/ProjectContext";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../../components/ui/card";
+import { Progress } from "../../components/ui/progress";
 import { CheckCircle, Clock, AlertCircle, Loader2 } from "lucide-react";
 
 interface TaskStatisticsProps {

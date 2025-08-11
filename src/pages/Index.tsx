@@ -230,8 +230,8 @@ const Index = () => {
       </div>
 
       {/* Login / Signup card */}
-      <div className="relative w-full max-w-md p-0 z-10">
-        <div className="rounded-2xl shadow-xl bg-white/90 dark:bg-zinc-900/90 border border-border px-8 py-10 sm:px-10 sm:py-12 space-y-8">
+      <div className="relative w-full max-w-sm p-0 z-10">
+        <div className="rounded-2xl shadow-xl bg-white/90 dark:bg-zinc-900/90 border border-border px-5 py-7 sm:px-7 sm:py-8 space-y-7">
           <Logo />
           <div className="text-center">
             <h1 className="text-3xl font-extrabold tracking-tight text-primary">
@@ -261,7 +261,6 @@ const Index = () => {
               type="button"
               variant="outline"
               className="w-full flex items-center justify-center gap-2 border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-700 text-gray-700 dark:text-gray-200 font-semibold shadow-sm rounded-lg py-2"
-              onClick={() => alert("Google login not implemented")}
             >
               <svg
                 width="20"
@@ -300,7 +299,6 @@ const Index = () => {
               type="button"
               variant="outline"
               className="w-full flex items-center justify-center gap-2 border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-700 text-gray-700 dark:text-gray-200 font-semibold shadow-sm rounded-lg py-2"
-              onClick={() => alert("GitHub login not implemented")}
             >
               <svg
                 width="20"
@@ -317,7 +315,6 @@ const Index = () => {
               type="button"
               variant="outline"
               className="w-full flex items-center justify-center gap-2 border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-700 text-gray-700 dark:text-gray-200 font-semibold shadow-sm rounded-lg py-2"
-              onClick={() => alert("Microsoft login not implemented")}
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                 <g>

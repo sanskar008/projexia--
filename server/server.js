@@ -1,18 +1,19 @@
+const dotenv = require("dotenv");
+dotenv.config();
+
 const express = require("express");
 const mongoose = require("mongoose");
 const passport = require("passport");
 const cookieSession = require("cookie-session");
-const dotenv = require("dotenv");
-const authRoutes = require("./routes/auth");
+const authRoutes = require("./routes/authRoutes");
 require("./config/passport");
 
-dotenv.config();
-
 const app = express();
+
 const PORT = process.env.PORT || 8080;
 
 mongoose
-  .connect(process.env.MONGO_URI)
+  .connect(process.env.MONGODB_URI)
   .then(() => console.log("MongoDB Connected"));
 
 app.use(

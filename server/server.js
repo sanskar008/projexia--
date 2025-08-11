@@ -5,10 +5,16 @@ const express = require("express");
 const mongoose = require("mongoose");
 const passport = require("passport");
 const cookieSession = require("cookie-session");
-const authRoutes = require("./routes/authRoutes");
+
+// Register ts-node for TypeScript support in development
+require("ts-node").register();
+
+const authRoutes = require("./routes/auth");
+const projectRoutes = require("./routes/projectRoutes.ts").default;
 require("./config/passport");
 
 const app = express();
+app.use(express.json());
 
 const PORT = process.env.PORT || 8080;
 
@@ -29,20 +35,23 @@ app.use(passport.session());
 
 // CORS for frontend
 const cors = require("cors");
-const allowedOrigins = [
-  "http://localhost:5173",
-  "https://projexia-eight.vercel.app",
-  "https://projexia.sanskarkoserwal.online",
-];
+
 app.use(
   cors({
-    origin: allowedOrigins,
-    methods: "GET,POST",
+    origin: [
+      "http://localhost:8080",
+      "http://localhost:5173",
+      "https://projexia-eight.vercel.app",
+      "https://projexia.sanskarkoserwal.online",
+    ],
+    methods: "GET,POST,PUT,DELETE,OPTIONS",
+    allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
   })
 );
 
-app.use("/auth", authRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/projects", projectRoutes);
 
 app.get("/", (req, res) => {
   res.send("Server is running");

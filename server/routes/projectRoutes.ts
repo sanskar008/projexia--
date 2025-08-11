@@ -36,6 +36,7 @@ router.get("/", async (req, res) => {
       .populate("members");
     res.json(projects);
   } catch (error) {
+    console.error("/api/projects error:", error);
     res.status(500).json({ message: "Server error", error });
   }
 });

@@ -28,9 +28,14 @@ app.use(passport.session());
 
 // CORS for frontend
 const cors = require("cors");
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://projexia-eight.vercel.app",
+  "https://projexia.sanskarkoserwal.online",
+];
 app.use(
   cors({
-    origin: "http://localhost:5173", // your frontend
+    origin: allowedOrigins,
     methods: "GET,POST",
     credentials: true,
   })

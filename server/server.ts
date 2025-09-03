@@ -7,6 +7,9 @@ import taskRoutes from "./routes/taskRoutes";
 import commentRoutes from "./routes/commentRoutes";
 import authRoutes from "./routes/authRoutes";
 
+import path from "path";
+import { fileURLToPath } from "url";
+
 // Load environment variables
 dotenv.config();
 
@@ -36,6 +39,19 @@ app.use("/api/projects", projectRoutes);
 app.use("/api/tasks", taskRoutes);
 app.use("/api/comments", commentRoutes);
 app.use("/api/auth", authRoutes);
+
+// Serve static frontend files
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const clientBuildPath = path.resolve(__dirname, "../dist");
+app.use(express.static(clientBuildPath));
+
+// Serve index.html for all non-API routes
+app.get("/*", (req, res) => {
+  if (req.path.startsWith("/api/"))
+    return res.status(404).send("API route not found");
+  res.sendFile(path.join(clientBuildPath, "index.html"));
+});
 
 // Health check endpoint
 app.get("/health", (req: Request, res: Response) => {

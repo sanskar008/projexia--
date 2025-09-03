@@ -1,13 +1,37 @@
-
 # Project Management Application
 
 This is a full-stack project management application with React frontend and MongoDB backend.
+
+## 🚀 Deploying to Render
+
+### Backend (Express API)
+
+1. Push your code to GitHub.
+2. Go to [Render Dashboard](https://dashboard.render.com/) → New Web Service.
+3. Connect your repo, set root directory to `server/`.
+4. Build command: `npm install && npm run build`
+5. Start command: `npm start`
+6. Add environment variables:
+   - `PORT` (Render sets this automatically)
+   - `MONGODB_URI` (your MongoDB connection string)
+7. Deploy.
+
+### Frontend (Vite)
+
+1. Go to Render → New Static Site.
+2. Connect your repo, set root directory to project root.
+3. Build command: `npm install && npm run build`
+4. Publish directory: `dist`
+5. Add environment variable (if needed):
+   - `VITE_API_URL` (set to your deployed backend URL)
+6. Deploy.
 
 ## Frontend
 
 The frontend is built with React, Tailwind CSS, and shadcn/ui components.
 
 ### Features
+
 - Dashboard with project statistics
 - Kanban board for task management
 - Team management
@@ -20,10 +44,12 @@ The backend is built with Express.js and MongoDB.
 ### Setup
 
 1. Make sure you have MongoDB installed and running locally.
+
    - You can download MongoDB from [here](https://www.mongodb.com/try/download/community).
    - Alternatively, you can use MongoDB Atlas (cloud version) and update the connection string in `.env`.
 
 2. Install server dependencies:
+
    ```
    cd server
    npm install
@@ -37,11 +63,13 @@ The backend is built with Express.js and MongoDB.
 ## Running the Full Application
 
 1. Start MongoDB:
+
    ```
    mongod
    ```
 
 2. Start the backend server (in one terminal):
+
    ```
    cd server
    npm run dev

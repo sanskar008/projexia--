@@ -43,7 +43,7 @@ app.use("/api/auth", authRoutes);
 // Serve static frontend files
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const clientBuildPath = path.resolve(__dirname, "../dist");
+const clientBuildPath = path.resolve(__dirname, "../../dist");
 app.use(express.static(clientBuildPath));
 
 // Serve index.html for all non-API routes

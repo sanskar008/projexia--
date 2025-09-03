@@ -2,10 +2,10 @@ import express, { Request, Response } from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import projectRoutes from "./routes/projectRoutes";
-import taskRoutes from "./routes/taskRoutes";
-import commentRoutes from "./routes/commentRoutes";
-import authRoutes from "./routes/authRoutes";
+import projectRoutes from "./routes/projectRoutes.js";
+import taskRoutes from "./routes/taskRoutes.js";
+import commentRoutes from "./routes/commentRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
 
 import path from "path";
 import { fileURLToPath } from "url";

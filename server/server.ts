@@ -21,14 +21,7 @@ console.log("MongoDB URI:", MONGODB_URI);
 // Middleware
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "http://localhost:8080",
-      "http://127.0.0.1:5173",
-      "http://127.0.0.1:8080",
-    ],
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    origin: true, // allow same-origin and any origin for SSR
     credentials: true,
   })
 );

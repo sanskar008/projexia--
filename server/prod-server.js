@@ -15,28 +15,26 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 8080;
 
-const allowedOrigins = [
+let allowedOrigins = [
   "http://localhost:5173",
   "https://projexia-eight.vercel.app",
 ];
+console.log("CORS allowedOrigins:", allowedOrigins);
+if (!Array.isArray(allowedOrigins) || allowedOrigins.length === 0) {
+  console.warn(
+    "allowedOrigins is empty or invalid, allowing all origins for debugging."
+  );
+  allowedOrigins = undefined;
+}
 
-// CORS middleware at the very top
-app.use(
-  cors({
-    origin: allowedOrigins,
-    credentials: true,
-  })
-);
+// CORS middleware at the very top (debug: allow all origins)
+console.log("Registering middleware: CORS");
+app.use(cors());
 
-// Explicitly handle preflight requests for all routes
-app.options(
-  "*",
-  cors({
-    origin: allowedOrigins,
-    credentials: true,
-  })
-);
+// Explicitly handle preflight requests for all routes (debug: allow all origins)
+app.options("*", cors());
 
+console.log("Registering middleware: helmet");
 app.use(
   session({
     maxAge: 24 * 60 * 60 * 1000,
@@ -44,8 +42,11 @@ app.use(
   })
 );
 
+console.log("Registering middleware: express.json()");
 app.use(express.json());
+console.log("Registering middleware: passport.initialize()");
 app.use(passport.initialize());
+console.log("Registering middleware: passport.session()");
 app.use(passport.session());
 
 // MongoDB connection
@@ -54,6 +55,7 @@ mongoose
   .then(() => console.log("MongoDB Connected"));
 
 // Use compiled routes
+console.log("Registering route: /auth");
 app.use("/auth", authRoutesDefault);
 
 app.listen(PORT, () => {

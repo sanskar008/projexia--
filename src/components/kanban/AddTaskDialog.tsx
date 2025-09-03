@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useProject } from "../../contexts/ProjectContext";
-import { toast } from "../../hooks/use-toast";
+import { useToast } from "../../hooks/use-toast";
 import {
   Dialog,
   DialogContent,
@@ -39,6 +39,7 @@ interface AddTaskDialogProps {
 
 const AddTaskDialog: React.FC<AddTaskDialogProps> = ({ projectId }) => {
   const { createTask, currentProject, isLoading, loadTasks } = useProject();
+  const { addToast } = useToast();
   const [open, setOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [title, setTitle] = useState("");
@@ -54,7 +55,7 @@ const AddTaskDialog: React.FC<AddTaskDialogProps> = ({ projectId }) => {
     e.preventDefault();
 
     if (!title.trim()) {
-      toast({
+      addToast({
         title: "Error",
         description: "Task title is required",
         variant: "destructive",
@@ -63,7 +64,7 @@ const AddTaskDialog: React.FC<AddTaskDialogProps> = ({ projectId }) => {
     }
 
     if (!description.trim()) {
-      toast({
+      addToast({
         title: "Error",
         description: "Task description is required",
         variant: "destructive",
@@ -72,7 +73,7 @@ const AddTaskDialog: React.FC<AddTaskDialogProps> = ({ projectId }) => {
     }
 
     if (!dueDate) {
-      toast({
+      addToast({
         title: "Error",
         description: "Due date is required",
         variant: "destructive",
@@ -81,7 +82,7 @@ const AddTaskDialog: React.FC<AddTaskDialogProps> = ({ projectId }) => {
     }
 
     if (!currentProject) {
-      toast({
+      addToast({
         title: "Error",
         description: "No project selected",
         variant: "destructive",
@@ -92,7 +93,7 @@ const AddTaskDialog: React.FC<AddTaskDialogProps> = ({ projectId }) => {
     setIsSubmitting(true);
 
     try {
-      await createTask({
+      const result = await createTask({
         projectId,
         title: title.trim(),
         description: description.trim(),
@@ -105,6 +106,19 @@ const AddTaskDialog: React.FC<AddTaskDialogProps> = ({ projectId }) => {
         comments: [], // Add empty comments array
         attachments: [], // Add empty attachments array
       });
+
+      console.log("Create Task API result:", result);
+
+      // Use type assertion to allow _id property from backend
+      const taskId = result?.id || (result as any)?._id;
+      if (!result || !taskId) {
+        addToast({
+          title: "Error",
+          description: "Task creation failed: No ID returned from server.",
+          variant: "destructive",
+        });
+        return;
+      }
 
       // Refresh tasks for the current project
       if (currentProject) {
@@ -122,13 +136,13 @@ const AddTaskDialog: React.FC<AddTaskDialogProps> = ({ projectId }) => {
       setNewTag("");
       setOpen(false);
 
-      toast({
+      addToast({
         title: "Success",
         description: "Task created successfully",
       });
     } catch (error) {
       console.error("Error creating task:", error);
-      toast({
+      addToast({
         title: "Error",
         description: "Failed to create task. Please try again.",
         variant: "destructive",

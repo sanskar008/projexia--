@@ -12,27 +12,23 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 8080;
 
-const allowedOrigins = [
+let allowedOrigins = [
   "http://localhost:5173",
   "https://projexia-eight.vercel.app",
 ];
+console.log("CORS allowedOrigins:", allowedOrigins);
+if (!Array.isArray(allowedOrigins) || allowedOrigins.length === 0) {
+  console.warn(
+    "allowedOrigins is empty or invalid, allowing all origins for debugging."
+  );
+  allowedOrigins = undefined;
+}
 
-// CORS middleware at the very top
-app.use(
-  cors({
-    origin: allowedOrigins,
-    credentials: true,
-  })
-);
+// CORS middleware at the very top (debug: allow all origins)
+app.use(cors());
 
-// Explicitly handle preflight requests for all routes
-app.options(
-  "*",
-  cors({
-    origin: allowedOrigins,
-    credentials: true,
-  })
-);
+// Explicitly handle preflight requests for all routes (debug: allow all origins)
+app.options("*", cors());
 
 app.use(
   session({

@@ -36,6 +36,7 @@ const router = express.Router();
 
 const BYPASS_AUTH = process.env.BYPASS_AUTH === "true";
 // Signup
+console.log("Registering POST /signup");
 router.post("/signup", async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -67,6 +68,7 @@ router.post("/signup", async (req, res) => {
 });
 
 // Login
+console.log("Registering POST /login");
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -96,6 +98,7 @@ router.post("/login", async (req, res) => {
 });
 
 // Update user avatar
+console.log("Registering PUT /me/avatar");
 router.put("/me/avatar", async (req, res) => {
   try {
     const { userId, avatarUrl } = req.body;
@@ -117,6 +120,7 @@ router.put("/me/avatar", async (req, res) => {
 });
 
 // Google Auth Route
+console.log("Registering GET /google");
 router.get(
   "/google",
   (req, res, next) => {
@@ -130,6 +134,7 @@ router.get(
 );
 
 // Google Callback
+console.log("Registering GET /google/callback");
 router.get(
   "/google/callback",
   (req, res, next) => {
@@ -157,6 +162,7 @@ router.get(
 );
 
 // Logout Route
+console.log("Registering GET /logout");
 router.get("/logout", (req, res) => {
   req.logout(() => {
     res.send("Logged out");
@@ -164,6 +170,7 @@ router.get("/logout", (req, res) => {
 });
 
 // Get Current User
+console.log("Registering GET /current-user");
 router.get("/current-user", (req, res) => {
   if (BYPASS_AUTH && !req.user) {
     return res.send({

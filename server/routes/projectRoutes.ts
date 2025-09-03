@@ -7,6 +7,7 @@ import ChatMessage from "../models/ChatMessage";
 const router = express.Router();
 
 // Get all projects
+console.log("Registering GET /");
 router.get("/", async (req, res) => {
   try {
     const userId = req.query.userId;

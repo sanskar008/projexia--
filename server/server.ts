@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
-const dotenv = require('dotenv');
+import dotenv from 'dotenv';
 import projectRoutes from './routes/projectRoutes';
 import taskRoutes from './routes/taskRoutes';
 import commentRoutes from './routes/commentRoutes';
@@ -12,22 +12,38 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const MONGODB_URI = process.env.MONGODB_URI;
-console.log('MongoDB URI:', MONGODB_URI);
+const MONGODB_URI = process.env.MONGODB_URI || process.env.MONGO_URI;
+
+// CORS configuration
+const allowedOrigins = process.env.CORS_ORIGINS
+  ? process.env.CORS_ORIGINS.split(',')
+  : [
+      'http://localhost:5173',
+      'http://localhost:8080',
+      'http://127.0.0.1:5173',
+      'http://127.0.0.1:8080',
+      'https://projexia-eight.vercel.app',
+      'https://projexia.sanskarkoserwal.online',
+    ];
 
 // Middleware
-app.use(cors({
-  origin: [
-    'http://localhost:5173',
-    'http://localhost:8080',
-    'http://127.0.0.1:5173',
-    'http://127.0.0.1:8080',
-  ],
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: allowedOrigins,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+  })
+);
 app.use(express.json());
+
+// Root endpoint
+app.get('/', (req, res) => {
+  res.json({ 
+    status: 'Server is running',
+    message: 'Projexia API Server'
+  });
+});
 
 // Routes
 app.use('/api/projects', projectRoutes);

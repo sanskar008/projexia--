@@ -3,7 +3,8 @@ import fetch from "node-fetch";
 // Simple Node.js script to test your main API endpoints
 // Run with: node api-test.js
 
-const API_URL = "http://localhost:5000/api"; // Change if needed
+const API_URL =
+  process.env.API_URL || "https://projexia-backend-ew1n.onrender.com/api";
 
 async function testAPI() {
   try {

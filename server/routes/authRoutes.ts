@@ -1,8 +1,11 @@
 import express from "express";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 import User from "../models/User";
 
 const router = express.Router();
+
+const JWT_SECRET = process.env.JWT_SECRET || "change_this_secret";
 
 // Signup
 router.post("/signup", async (req, res) => {
@@ -19,19 +22,21 @@ router.post("/signup", async (req, res) => {
     }
     const hashedPassword = await bcrypt.hash(password, 10);
     const avatarUrl = `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(
-      email
+      email,
     )}`;
     const user = new User({ name, email, password: hashedPassword, avatarUrl });
     await user.save();
-    res
-      .status(201)
-      .json({
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        avatarUrl: user.avatarUrl,
-        role: user.role,
-      });
+    const token = jwt.sign({ id: user._id, email: user.email }, JWT_SECRET, {
+      expiresIn: "7d",
+    });
+    res.status(201).json({
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      avatarUrl: user.avatarUrl,
+      role: user.role,
+      token,
+    });
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
   }
@@ -54,12 +59,16 @@ router.post("/login", async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid email or password" });
     }
+    const token = jwt.sign({ id: user._id, email: user.email }, JWT_SECRET, {
+      expiresIn: "7d",
+    });
     res.json({
       id: user._id,
       name: user.name,
       email: user.email,
       avatarUrl: user.avatarUrl,
       role: user.role,
+      token,
     });
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
@@ -75,7 +84,6 @@ router.put("/me/avatar", async (req, res) => {
         .status(400)
         .json({ message: "userId and avatarUrl are required" });
     }
-    const User = require("../models/User.js");
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ message: "User not found" });

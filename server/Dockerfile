@@ -5,17 +5,17 @@ FROM node:20-alpine
 WORKDIR /app
 
 # Copy package files and install dependencies
-COPY package.json package-lock.json* bun.lockb* ./
-RUN if [ -f package-lock.json ]; then npm ci; elif [ -f bun.lockb ]; then npm install -g bun && bun install; else npm install; fi
+COPY package.json package-lock.json* ./
+RUN npm install
 
 # Copy the rest of the backend code
 COPY . .
 
-# Expose the port (change if your server uses a different port)
-EXPOSE 3000
+# Build TypeScript
+RUN npm run build
 
-# Set ESBuild binary path
-ENV ESBUILD_BINARY_PATH=/usr/local/bin/esbuild
+# Expose the port
+EXPOSE 5000
 
-# Start the server (change to your actual entry point if different)
-CMD ["node", "prod-server.js"]
+# Start the server
+CMD ["npm", "start"]

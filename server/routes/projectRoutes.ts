@@ -3,6 +3,7 @@ import Project from "../models/Project";
 import Task from "../models/Task";
 import ProjectMember from "../models/ProjectMember";
 import ChatMessage from "../models/ChatMessage";
+import { requireAuth } from "../middleware/authMiddleware";
 
 const router = express.Router();
 
@@ -155,7 +156,7 @@ router.delete("/:id", async (req, res) => {
 });
 
 // Invite a member to a project
-router.post("/:id/invite", async (req, res) => {
+router.post("/:id/invite", requireAuth, async (req, res) => {
   try {
     const { email } = req.body;
     const projectId = req.params.id;
@@ -180,7 +181,7 @@ router.post("/:id/invite", async (req, res) => {
     // Try to find a real user for this email
     let name = email;
     let avatarUrl = `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(
-      email
+      email,
     )}`;
     try {
       const User = (await import("../models/User")).default;
@@ -214,31 +215,35 @@ router.post("/:id/invite", async (req, res) => {
 });
 
 // Remove a member from a project
-router.delete("/:projectId/members/:memberId", async (req, res) => {
-  try {
-    const { projectId, memberId } = req.params;
-    const project = await Project.findById(projectId);
-    if (!project) {
-      return res.status(404).json({ message: "Project not found" });
+router.delete(
+  "/:projectId/members/:memberId",
+  requireAuth,
+  async (req, res) => {
+    try {
+      const { projectId, memberId } = req.params;
+      const project = await Project.findById(projectId);
+      if (!project) {
+        return res.status(404).json({ message: "Project not found" });
+      }
+
+      // Remove member from project.members array
+      project.members = project.members.filter(
+        (m: any) => m.toString() !== memberId,
+      );
+      await project.save();
+
+      // Remove the ProjectMember document
+      await ProjectMember.findByIdAndDelete(memberId);
+
+      res.json({ message: "Member removed from project" });
+    } catch (error) {
+      res.status(500).json({ message: "Server error", error });
     }
-
-    // Remove member from project.members array
-    project.members = project.members.filter(
-      (m: any) => m.toString() !== memberId
-    );
-    await project.save();
-
-    // Remove the ProjectMember document
-    await ProjectMember.findByIdAndDelete(memberId);
-
-    res.json({ message: "Member removed from project" });
-  } catch (error) {
-    res.status(500).json({ message: "Server error", error });
-  }
-});
+  },
+);
 
 // Update a project member's role
-router.put("/:projectId/members/:memberId", async (req, res) => {
+router.put("/:projectId/members/:memberId", requireAuth, async (req, res) => {
   try {
     const { projectId, memberId } = req.params;
     const { role } = req.body;
@@ -271,7 +276,7 @@ router.get("/:id/chat", async (req, res) => {
 });
 
 // Post a new chat message to a project
-router.post("/:id/chat", async (req, res) => {
+router.post("/:id/chat", requireAuth, async (req, res) => {
   try {
     const projectId = req.params.id;
     const { userId, userName, content } = req.body;

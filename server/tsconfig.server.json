@@ -5,9 +5,31 @@
     "outDir": "./dist",
     "rootDir": "./",
     "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
     "strict": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
   },
-  "include": ["./**/*.ts"],
-  "exclude": ["node_modules", "dist"]
+  "include": [
+    "server.ts",
+    "routes/**/*.ts",
+    "models/**/*.ts",
+    "config/**/*.ts",
+    "controllers/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.test.ts",
+    "**/*.spec.ts",
+    "vite.config.ts",
+    "tailwind.config.ts",
+    "tsconfig*.json",
+    "postcss.config.js",
+    "eslint.config.js",
+    "index.html",
+    "src/**/*"
+  ]
 }
